@@ -2,7 +2,7 @@
 A modern, customizable video player built with React, focused on performance, accessibility, and clean UI/UX.
 
 ## Demo 
-- Live Demo:
+- Live Demo: https://ebram-barsoum.github.io/React-Video-Player/
 
 
 ## Tech-Stack:
