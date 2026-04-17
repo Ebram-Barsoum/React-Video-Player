@@ -37,8 +37,8 @@ A modern, customizable video player built with React, focused on performance, ac
        
 ## Future Work:
 - Subtitle support.
-- streaming support.
-  
+- Streaming support.
+
 ## Installing:
       git clone https://github.com/Ebram-Barsoum/React-Video-Player.git
       cd React-Video-Player
