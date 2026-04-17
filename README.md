@@ -26,9 +26,9 @@ A modern, customizable video player built with React, focused on performance, ac
 - Reusable and clean component structure.
 
 ## Screenshots:
-![Player UI](./assets/screenshots/initial-state.png)
-![Fullscreen Mode](./assets/screenshots/fullscreen-mode.png)
-![Controls](./assets/screenshots/controls.png)
+![Player UI](./public/assets/screenshots/initial-state.png)
+![Fullscreen Mode](./public/assets/screenshots/fullscreen-mode.png)
+![Controls](./public/assets/screenshots/controls.png)
 
 ## Challenges & Solutions
    ### Fullscreen handling
