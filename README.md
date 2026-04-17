@@ -32,15 +32,15 @@ A modern, customizable video player built with React, focused on performance, ac
 
 ## Challenges & Solutions
    ### Fullscreen handling
-      - Problem: Detecting exit from fullscreen using keyboard (Esc)
-      - Solution: Listening to fullscreenchange event instead of relying only on key events
+   **Problem:** Detecting exit from fullscreen using keyboard (Esc)
+   **Solution:** Listening to fullscreenchange event instead of relying only on key events
        
 ## Future Work:
 - Subtitle support.
 - streaming support.
   
 ## Installing:
-git clone https://github.com/Ebram-Barsoum/React-Video-Player.git
-cd React-Video-Player
-npm install
-npm run dev
+      git clone https://github.com/Ebram-Barsoum/React-Video-Player.git
+      cd React-Video-Player
+      npm install
+      npm run dev
