@@ -4,7 +4,7 @@ A modern, customizable video player built with React, focused on performance, ac
 
 ## Demo
 
-- Live Demo: [https://ebram-barsoum.github.io/React-Video-Player/](https://react-video-player-indol.vercel.app)
+- Live Demo: [https://react-video-player-indol.vercel.app]
 
 ## Tech-Stack:
 
