@@ -1,17 +1,20 @@
 # React Video Player
+
 A modern, customizable video player built with React, focused on performance, accessibility, and clean UI/UX.
 
-## Demo 
+## Demo
+
 - Live Demo: https://ebram-barsoum.github.io/React-Video-Player/
 
-
 ## Tech-Stack:
+
 - React.js
 - State managements using useReducer, useRef, and useState.
 - TypeScript.
 - TailwindCSS
 
 ## Features:
+
 - Select and Remove video.
 - Play & Pause video.
 - Seek [forward & backward].
@@ -26,20 +29,24 @@ A modern, customizable video player built with React, focused on performance, ac
 - Reusable and clean component structure.
 
 ## Screenshots:
+
 ![Player UI](./public/assets/screenshots/initial-state.png)
 ![Fullscreen Mode](./public/assets/screenshots/fullscreen-mode.png)
 ![Controls](./public/assets/screenshots/controls.png)
 
 ## Challenges & Solutions
-   ### Fullscreen handling
-   **Problem:** Detecting exit from fullscreen using keyboard (Esc)
-   **Solution:** Listening to fullscreenchange event instead of relying only on key events
-       
+
+### Fullscreen handling
+
+**Problem:** Detecting exit from fullscreen using keyboard (Esc)
+**Solution:** Listening to fullscreenchange event instead of relying only on key events
+
 ## Future Work:
-- Subtitle support.
+
 - Streaming support.
 
 ## Installing:
+
       git clone https://github.com/Ebram-Barsoum/React-Video-Player.git
       cd React-Video-Player
       npm install
