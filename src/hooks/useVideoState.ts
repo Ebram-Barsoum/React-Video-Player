@@ -72,7 +72,11 @@ function reducer(state: VideoState, action: Action): VideoState {
         case "TIME/UPDATED":
             return { ...state, currentTime: action.payload?.currentTime as number };
         case "TOGGLE_FULLSCREEN":
-            return { ...state, maximized: action.payload?.maximized as boolean };
+            return {
+                ...state,
+                maximized: action.payload?.maximized as boolean,
+                showControls: !action.payload?.maximized
+            };
         case "SPEED/CHANGED":
             return { ...state, speed: action.payload?.speed as number };
         case "TOGGLE_MUTE":
