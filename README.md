@@ -51,3 +51,8 @@ A modern, customizable video player built with React, focused on performance, ac
       cd React-Video-Player
       npm install
       npm run dev
+
+## Deployment
+
+- Vercel: use the default `npm run build` command and deploy the `dist` directory.
+- GitHub Pages: run `npm run deploy` to build with the repository subpath and publish `dist`.
