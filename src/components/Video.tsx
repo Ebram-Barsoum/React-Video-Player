@@ -8,7 +8,9 @@ interface VideoProps {
     aspect: string;
     repeat: boolean;
     onDurationChange: (duration: number) => void;
-    onToggleVideo: () => void;
+    handlePlayVideo: () => void;
+    handlePauseVideo: () => void;
+    handleTimeUpdate: (time: number) => void;
 }
 
 export default function Video({
@@ -19,16 +21,19 @@ export default function Video({
     aspect,
     repeat,
     onDurationChange,
-    onToggleVideo,
+    handlePlayVideo,
+    handlePauseVideo,
+    handleTimeUpdate
 }: VideoProps): JSX.Element {
     return (
         <video
             src={videoUrl || ""}
             ref={videoRef}
-            onEnded={(e) => {
-                e.currentTarget.currentTime = 0;
+            onEnded={() => {
+                handleTimeUpdate(0);
 
-                if (!repeat) onToggleVideo();
+                if (repeat) handlePlayVideo();
+                else handlePauseVideo();
             }}
             onLoadedMetadata={(e) => {
                 onDurationChange(e.currentTarget.duration);

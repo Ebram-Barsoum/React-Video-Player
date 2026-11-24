@@ -18,7 +18,7 @@ export interface VideoState {
 }
 
 type VideoAction = "VIDEO/ADDED" | "VIDEO/REMOVED" | "SUBTITLES/ADDED" | "SUBTITLES/REMOVED" | "TOGGLE_CONTROLS" | "VOLUME/CHANGED" | "DURATION/SET" |
-    "PLAY/PAUSE" | "TIME/UPDATED" | "TOGGLE_FULLSCREEN" | "TOGGLE_REPEAT" |
+    "PLAY" | "PAUSE" | "TIME/UPDATED" | "TOGGLE_FULLSCREEN" | "TOGGLE_REPEAT" |
     "ASPECT/CHANGED" | "SPEED/CHANGED" | "TOGGLE_MUTE" | "RESET";
 
 interface Action {
@@ -65,8 +65,10 @@ function reducer(state: VideoState, action: Action): VideoState {
             return { ...state, showControls: action.payload?.showControls as boolean };
         case "VOLUME/CHANGED":
             return { ...state, volume: action.payload?.volume as number };
-        case "PLAY/PAUSE":
-            return { ...state, isPaused: !state.isPaused };
+        case "PLAY":
+            return { ...state, isPaused: false };
+        case "PAUSE":
+            return { ...state, isPaused: true };
         case "TIME/UPDATED":
             return { ...state, currentTime: action.payload?.currentTime as number };
         case "TOGGLE_FULLSCREEN":
@@ -103,7 +105,8 @@ const removeSubtitlesAction = (): Action => ({ type: "SUBTITLES/REMOVED" });
 const setDurationAction = (duration: number): Action => ({ type: "DURATION/SET", payload: { duration } });
 const toggleControlsAction = (showControls: boolean): Action => ({ type: "TOGGLE_CONTROLS", payload: { showControls } });
 const changeVolumeAction = (volume: number): Action => ({ type: "VOLUME/CHANGED", payload: { volume } });
-const playPauseAction = (): Action => ({ type: "PLAY/PAUSE" });
+const playAction = (): Action => ({ type: "PLAY" });
+const pauseAction = (): Action => ({ type: "PAUSE" });
 const updateTimeAction = (currentTime: number): Action => ({ type: "TIME/UPDATED", payload: { currentTime } });
 const toggleFullScreenAction = (maximized: boolean): Action => ({ type: "TOGGLE_FULLSCREEN", payload: { maximized } });
 const changeSpeedAction = (speed: number): Action => ({ type: "SPEED/CHANGED", payload: { speed } });
@@ -136,16 +139,22 @@ export default function useVideoState() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const { videoUrl, subtitlesUrl, volume, maximized, speed, aspect, isMuted, duration } = state;
+    const { videoUrl, subtitlesUrl, volume, maximized, speed, aspect, isMuted, duration, isPaused } = state;
 
-    const handleToggleVideo = () => {
+    const handlePlayVideo = () => {
         const video = videoRef?.current;
         if (!video) return;
 
-        if (video.paused) video.play();
-        else video.pause();
+        video.play();
+        dispatch(playAction());
+    }
 
-        dispatch(playPauseAction());
+    const handlePauseVideo = () => {
+        const video = videoRef?.current;
+        if (!video) return;
+
+        video.pause();
+        dispatch(pauseAction());
     }
 
     const handleSkipSeconds = (direction: "forward" | "backward") => {
@@ -272,7 +281,7 @@ export default function useVideoState() {
         const handleKeyPress = (e: KeyboardEvent) => {
             switch (e.key) {
                 case ' ':
-                    handleToggleVideo();
+                    if (isPaused) handlePlayVideo(); else handlePauseVideo();
                     break;
                 case 'ArrowRight':
                     handleSkipSeconds("forward");
@@ -324,6 +333,8 @@ export default function useVideoState() {
         videoRef,
         handleRemoveVideo,
         handleAddVideo,
+        handlePlayVideo,
+        handlePauseVideo,
         handleToggleControls,
         handleAspectChange,
         handleSpeedChange,
@@ -333,7 +344,6 @@ export default function useVideoState() {
         handleMuteToggle,
         handleVolumeChange,
         handleSkipSeconds,
-        handleToggleVideo,
         handleDurationChange,
         handleResetVideoState,
         handleAddSubtitles,

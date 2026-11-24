@@ -12,7 +12,8 @@ interface VideoControllersProps {
     state: VideoState;
     videoRef: React.RefObject<HTMLVideoElement>;
     onTimeUpdate: (time: number) => void;
-    onToggleVideo: () => void;
+    handlePlayVideo: () => void;
+    handlePauseVideo: () => void;
     onSkipSeek: (direction: "forward" | "backward") => void;
     onToggleMute: () => void;
     onVolumeChange: (volume: number) => void;
@@ -23,12 +24,11 @@ interface VideoControllersProps {
     onAddSubtitles: (subtitles: File) => void;
 }
 
-export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkipSeek, onToggleMute, onToggleVideo, onVolumeChange, onSpeedChange, onToggleRepeat, onToggleFullScreen, onAspectChange, onAddSubtitles }: VideoControllersProps): JSX.Element | null {
+export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkipSeek, onToggleMute, handlePlayVideo, handlePauseVideo, onVolumeChange, onSpeedChange, onToggleRepeat, onToggleFullScreen, onAspectChange, onAddSubtitles }: VideoControllersProps): JSX.Element | null {
     const {
         video,
         subtitles,
         showControls,
-        currentTime,
         volume,
         maximized,
         speed,
@@ -38,8 +38,6 @@ export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkip
         isPaused
     } = state as VideoState;
 
-
-
     if (!showControls || !video) return null;
 
     return (
@@ -47,7 +45,6 @@ export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkip
             <VideoSeeker
                 videoRef={videoRef as React.RefObject<HTMLVideoElement>}
                 duration={duration}
-                currentTime={currentTime}
                 showControls={showControls}
                 onTimeUpdate={onTimeUpdate}
             />
@@ -64,7 +61,7 @@ export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkip
                     <ControlBtn
                         title="play/pause video"
                         label="video-toggler"
-                        onClick={onToggleVideo}
+                        onClick={isPaused ? handlePlayVideo : handlePauseVideo}
                         icon={isPaused ? <CirclePlay /> : <PauseOctagon />}
                     />
 

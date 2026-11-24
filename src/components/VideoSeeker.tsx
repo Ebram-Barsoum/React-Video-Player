@@ -6,28 +6,30 @@ import { formatDuration } from "../utls/healpers";
 interface VideoSeekerProps {
     videoRef: React.RefObject<HTMLVideoElement>
     duration: number,
-    currentTime: number,
     showControls: boolean
     onTimeUpdate: (value: number) => void
 }
 
-export default function VideoSeeker({ currentTime, duration, videoRef, showControls, onTimeUpdate }: VideoSeekerProps): JSX.Element {
-    const [time, setTime] = useState(0);
+export default function VideoSeeker({ duration, videoRef, showControls, onTimeUpdate }: VideoSeekerProps): JSX.Element {
+    const [time, setTime] = useState<number>(() => {
+        const video = videoRef.current;
+
+        if (!video) return 0;
+
+        return video.currentTime;
+    });
 
     useEffect(() => {
         const video = videoRef.current;
         if (!video || !showControls) return;
 
+        setTime(video.currentTime);
         const handleTimeUpdate = () => setTime(video.currentTime);
 
         video.addEventListener('timeupdate', handleTimeUpdate);
 
         return () => video.removeEventListener('timeupdate', handleTimeUpdate);
     }, [videoRef?.current, showControls]);
-
-    useEffect(() => {
-        setTime(currentTime);
-    }, [currentTime]);
 
     return (
         <div className='grid grid-cols-[auto_1fr_auto] items-center gap-2'>

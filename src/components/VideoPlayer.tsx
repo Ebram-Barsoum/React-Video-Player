@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import { type JSX } from "react";
 import useVideoState from "../hooks/useVideoState";
 
 import TopBar from "./TopBar";
@@ -15,7 +15,8 @@ export default function VideoPlayer(): JSX.Element {
         handleRemoveVideo,
         handleTimeUpdate,
         handleVolumeChange,
-        handleToggleVideo,
+        handlePlayVideo,
+        handlePauseVideo,
         handleDurationChange,
         handleAddVideo,
         handleSkipSeconds,
@@ -47,7 +48,9 @@ export default function VideoPlayer(): JSX.Element {
                 repeat={repeat}
                 videoRef={videoRef as React.RefObject<HTMLVideoElement>}
                 onDurationChange={handleDurationChange}
-                onToggleVideo={handleToggleVideo}
+                handlePlayVideo={handlePlayVideo}
+                handlePauseVideo={handlePauseVideo}
+                handleTimeUpdate={handleTimeUpdate}
             />}
 
             <VideoSelector videoUrl={videoUrl} onSelectVide={handleAddVideo} />
@@ -58,7 +61,8 @@ export default function VideoPlayer(): JSX.Element {
                 onTimeUpdate={handleTimeUpdate}
                 onSkipSeek={handleSkipSeconds}
                 onToggleMute={handleMuteToggle}
-                onToggleVideo={handleToggleVideo}
+                handlePlayVideo={handlePlayVideo}
+                handlePauseVideo={handlePauseVideo}
                 onVolumeChange={handleVolumeChange}
                 onSpeedChange={handleSpeedChange}
                 onToggleRepeat={handleRepeatVideo}
