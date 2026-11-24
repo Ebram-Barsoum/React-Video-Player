@@ -3,6 +3,8 @@ import { useEffect, useReducer, useRef } from "react";
 export interface VideoState {
     video: File | null;
     videoUrl: string | null;
+    subtitles: File | null;
+    subtitlesUrl: string | null;
     duration: number;
     showControls: boolean;
     volume: number;
@@ -15,14 +17,15 @@ export interface VideoState {
     aspect: string
 }
 
-type VideoAction = "VIDEO/ADDED" | "TOGGLE_CONTROLS" | "VOLUME/CHANGED" | "DURATION/SET" |
+type VideoAction = "VIDEO/ADDED" | "VIDEO/REMOVED" | "SUBTITLES/ADDED" | "SUBTITLES/REMOVED" | "TOGGLE_CONTROLS" | "VOLUME/CHANGED" | "DURATION/SET" |
     "PLAY/PAUSE" | "TIME/UPDATED" | "TOGGLE_FULLSCREEN" | "TOGGLE_REPEAT" |
-    "ASPECT/CHANGED" | "SPEED/CHANGED" | "TOGGLE_MUTE" | "REMOVE_VIDEO" | "RESET";
+    "ASPECT/CHANGED" | "SPEED/CHANGED" | "TOGGLE_MUTE" | "RESET";
 
 interface Action {
     type: VideoAction;
     payload?: {
         video?: File;
+        subtitles?: File;
         duration?: number;
         volume?: number;
         currentTime?: number;
@@ -41,6 +44,20 @@ function reducer(state: VideoState, action: Action): VideoState {
                 ...state,
                 video: action.payload?.video as File,
                 videoUrl: action.payload?.video ? URL.createObjectURL(action.payload.video as File) : null
+            };
+        case "VIDEO/REMOVED":
+            return initialState;
+        case "SUBTITLES/ADDED":
+            return {
+                ...state,
+                subtitles: action.payload?.subtitles as File,
+                subtitlesUrl: action.payload?.subtitles ? URL.createObjectURL(action.payload.subtitles as File) : null
+            };
+        case "SUBTITLES/REMOVED":
+            return {
+                ...state,
+                subtitles: null,
+                subtitlesUrl: null
             };
         case "DURATION/SET":
             return { ...state, duration: action.payload?.duration as number };
@@ -74,14 +91,15 @@ function reducer(state: VideoState, action: Action): VideoState {
                 speed: 1,
                 aspect: 'none'
             };
-        case "REMOVE_VIDEO":
-            return initialState;
         default:
             return state;
     }
 }
 
 const addVideoAction = (video: File): Action => ({ type: "VIDEO/ADDED", payload: { video } });
+const removeVideoAction = (): Action => ({ type: "VIDEO/REMOVED" });
+const addSubtitlesAction = (subtitles: File): Action => ({ type: "SUBTITLES/ADDED", payload: { subtitles } });
+const removeSubtitlesAction = (): Action => ({ type: "SUBTITLES/REMOVED" });
 const setDurationAction = (duration: number): Action => ({ type: "DURATION/SET", payload: { duration } });
 const toggleControlsAction = (showControls: boolean): Action => ({ type: "TOGGLE_CONTROLS", payload: { showControls } });
 const changeVolumeAction = (volume: number): Action => ({ type: "VOLUME/CHANGED", payload: { volume } });
@@ -92,12 +110,13 @@ const changeSpeedAction = (speed: number): Action => ({ type: "SPEED/CHANGED", p
 const changeAspectAction = (aspect: string): Action => ({ type: "ASPECT/CHANGED", payload: { aspect } });
 const toggleMuteAction = (): Action => ({ type: "TOGGLE_MUTE" });
 const toggleRepeatAction = (): Action => ({ type: "TOGGLE_REPEAT" });
-const removeVideoAction = (): Action => ({ type: "REMOVE_VIDEO" });
 const resetAction = (): Action => ({ type: "RESET" });
 
 const initialState: VideoState = {
     video: null,
     videoUrl: null,
+    subtitles: null,
+    subtitlesUrl: null,
     duration: 0,
     showControls: false,
     volume: .5,
@@ -117,7 +136,7 @@ export default function useVideoState() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const { videoUrl, volume, maximized, speed, aspect, isMuted, duration } = state;
+    const { videoUrl, subtitlesUrl, volume, maximized, speed, aspect, isMuted, duration } = state;
 
     const handleToggleVideo = () => {
         const video = videoRef?.current;
@@ -221,6 +240,13 @@ export default function useVideoState() {
         dispatch(removeVideoAction());
     }
 
+    const handleAddSubtitles = (subtitles: File) => {
+        dispatch(addSubtitlesAction(subtitles));
+    }
+
+    const handleRemoveSubtitles = () => {
+        dispatch(removeSubtitlesAction());
+    }
     const handleDurationChange = (duration: number) => {
         dispatch(setDurationAction(duration));
     }
@@ -278,10 +304,19 @@ export default function useVideoState() {
         return () => {
             if (videoUrl) {
                 URL.revokeObjectURL(videoUrl);
-                console.log("Video URL Revoked...");
+                console.log("Video URL revoked...");
             }
         }
     }, [videoUrl]);
+
+    useEffect(() => {
+        return () => {
+            if (subtitlesUrl) {
+                URL.revokeObjectURL(subtitlesUrl);
+                console.log("Subtitles URL revoked...");
+            }
+        }
+    }, [subtitlesUrl]);
 
     return {
         state,
@@ -300,6 +335,8 @@ export default function useVideoState() {
         handleSkipSeconds,
         handleToggleVideo,
         handleDurationChange,
-        handleResetVideoState
+        handleResetVideoState,
+        handleAddSubtitles,
+        handleRemoveSubtitles
     }
 }

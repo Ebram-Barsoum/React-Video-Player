@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import { type JSX } from "react";
 import { CircleMinus, CirclePlay, CirclePlus, Maximize, Minimize, PauseOctagon, Proportions, Repeat, Repeat1, RotateCcw, RotateCw, Volume2, VolumeX } from "lucide-react";
 
 import type { VideoState } from "../hooks/useVideoState";
@@ -6,6 +6,7 @@ import type { VideoState } from "../hooks/useVideoState";
 import Slider from "./Slider";
 import ControlBtn from "./ControlBtn";
 import VideoSeeker from "./VideoSeeker";
+import SubtitlesBtn from "./SubtitlesBtn";
 
 interface VideoControllersProps {
     state: VideoState;
@@ -19,11 +20,13 @@ interface VideoControllersProps {
     onToggleRepeat: () => void;
     onToggleFullScreen: () => void;
     onAspectChange: () => void;
+    onAddSubtitles: (subtitles: File) => void;
 }
 
-export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkipSeek, onToggleMute, onToggleVideo, onVolumeChange, onSpeedChange, onToggleRepeat, onToggleFullScreen, onAspectChange }: VideoControllersProps): JSX.Element | null {
+export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkipSeek, onToggleMute, onToggleVideo, onVolumeChange, onSpeedChange, onToggleRepeat, onToggleFullScreen, onAspectChange, onAddSubtitles }: VideoControllersProps): JSX.Element | null {
     const {
         video,
+        subtitles,
         showControls,
         currentTime,
         volume,
@@ -120,6 +123,11 @@ export default function VideoControllers({ state, videoRef, onTimeUpdate, onSkip
                         label="aspect ratio"
                         onClick={onAspectChange}
                         icon={<Proportions size={20} />}
+                    />
+
+                    <SubtitlesBtn
+                        currentSubtitles={subtitles}
+                        onSelectSubtitlesFile={onAddSubtitles}
                     />
 
                     <ControlBtn

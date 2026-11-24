@@ -7,3 +7,12 @@
 input[type="range"] {
     accent-color: theme("colors.amber.500");
 }
+
+video::cue {
+    font-size: 1rem;
+    color: white;
+}
+
+video::-webkit-media-text-track-container {
+    transform: translateY(-20px);
+}

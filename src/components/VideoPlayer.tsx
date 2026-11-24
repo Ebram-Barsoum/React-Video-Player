@@ -23,23 +23,25 @@ export default function VideoPlayer(): JSX.Element {
         handleAspectChange,
         handleRepeatVideo,
         handleMuteToggle,
-        handleToggleFullscreen
+        handleToggleFullscreen,
+        handleAddSubtitles
     } = useVideoState();
 
-    const { video, videoUrl, aspect, repeat, isMuted } = state;
+    const { video, videoUrl, subtitlesUrl, aspect, repeat, isMuted } = state;
 
     return (
         <div
             ref={containerRef}
             onMouseLeave={() => handleToggleControls(false)}
             onMouseEnter={() => handleToggleControls(true)}
-            className="relative w-[80%] h-137.5 flex items-center justify-center text-white border-2 border-gray-600 rounded-lg overflow-hidden"
+            className="relative w-[95%] h-[95%] flex items-center justify-center text-white border-2 border-gray-600 rounded-lg overflow-hidden"
 
         >
             <TopBar videoState={state} onRemoveVideo={handleRemoveVideo} />
 
             {(video && videoUrl) && <Video
                 videoUrl={videoUrl}
+                subtitlesUrl={subtitlesUrl}
                 isMuted={isMuted}
                 aspect={aspect}
                 repeat={repeat}
@@ -62,6 +64,7 @@ export default function VideoPlayer(): JSX.Element {
                 onToggleRepeat={handleRepeatVideo}
                 onToggleFullScreen={handleToggleFullscreen}
                 onAspectChange={handleAspectChange}
+                onAddSubtitles={handleAddSubtitles}
             />
         </div>
     )
